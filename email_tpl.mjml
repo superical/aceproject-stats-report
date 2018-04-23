@@ -1,0 +1,198 @@
+<!-- mjml template -->
+<mjml>
+  <mj-body>
+    <mj-container background-color="#d7dde5" width="1000">
+      <mj-section locked="true" full-width="full-width">
+        <mj-column width="66.66666666666666%" vertical-align="middle">
+          <mj-text align="left" font-size="11" locked="true" editable="true" padding-bottom="0" padding-top="0">
+            <span style="font-size: 11px">{data[projectName]} - {data[currentDateTime]:%d %b %Y, %I:%M %p}</span>
+          </mj-text>
+        </mj-column>
+        <mj-column width="33.33333333333333%" vertical-align="middle">
+          <mj-text align="right" font-size="11" locked="true" editable="false" padding-bottom="0" padding-top="0">
+            <span style="font-size: 11px">&#xA0;</span>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section background-color="#e85034" full-width="full-width">
+        <mj-column width="100%" vertical-align="middle">
+          <mj-text align="left" padding="0 20px" color="ffffff" font-size="26" line-height="40px" font-family="Ubuntu, Arial, Helvetica, sans-serif">
+            <span style="color:#ffffff">Project Tasks Overview</span>
+          </mj-text>
+          <mj-text align="left" padding="0 20px" color="#e5e5e5">
+            <span style="font-size: 20px; font-style:normal; font-weight: 100; font-family:Ubuntu, Arial,Helvetica, sans-serif">{data[projectName]}</span>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section vertical-align="middle" background-color="#ffffff" background-size="cover" full-width="full-width" background-repeat="no-repeat">
+        <mj-column width="100%" vertical-align="middle">
+          <mj-text align="center" font-size="14" color="#45474e" line-height="28px" padding-bottom="5" padding-top="5">
+            <span style="font-size: 26px; line-height: 34px;">Gantt Chart</span>
+            <br>
+            <span style="color: #e85034; font-size:12px">Tasks from {data[ganttChartStartEndDate][0]:%d %b %Y} to {data[ganttChartStartEndDate][1]:%d %b %Y}</span>
+          </mj-text>
+          <mj-image src="cid:{data[cidGanttChart]}" alt="" align="center" border="none" padding="0"></mj-image>
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding-top="0px" background-color="#FFFFFF" full-width="full-width" background-repeat="no-repeat">
+        <mj-column width="100%">
+          <mj-text align="center">
+            <strong><span style="font-size: 40px; color:#e85034">––</span></strong>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section vertical-align="middle" background-color="#ffffff" background-size="cover" full-width="full-width" background-repeat="no-repeat" padding="0px 0px">
+        <mj-column width="100%" vertical-align="middle">
+          <mj-text align="center" font-size="14" color="#45474e" line-height="28px" padding-bottom="10" padding-top="0">
+            <span style="font-size: 26px; line-height: 34px;">Effort Chart</span>
+            <br>
+            <span style="color: #e85034; font-size:12px">Effort burndown from {data[burndownChartStartEndDate][0]:%d %b %Y} to {data[burndownChartStartEndDate][1]:%d %b %Y, %I:%M %p}</span>
+            <br>
+            <span style="color: #e85034; font-size:12px; line-height:8px">Team proficiency targeted at {data[expectedProficiency]:.1f}%</span>
+          </mj-text>
+          <mj-image src="cid:{data[cidBurndown]}" alt="" align="center" border="none" padding="0"></mj-image>
+        </mj-column>
+      </mj-section>
+
+      <mj-section vertical-align="middle" background-color="#ffffff" full-width="full-width" padding="0px 0px">
+        <mj-column border="1px solid white" vertical-align="middle" width="33.33333333333333%" background-color="#FC9886" padding="0" margin="0" padding="0 0px">
+
+          <mj-text align="center" padding="0px 0px" padding-top="18px">
+            <br/>
+            Total Efforts Burnt<br/><br/>
+          </mj-text>
+          <mj-text align="center" font-size="36px" padding="0px 0px" line-height="38px">
+            {data[totalEffortBurnt]}
+          </mj-text>
+          <mj-text align="center" padding="0px 0px" padding-bottom="35px" font-size="10px" line-height="12px">
+            effort hours
+            <br/><br/>
+          </mj-text>
+
+        </mj-column>
+        <mj-column border="1px solid white" vertical-align="middle" width="33.33333333333333%" background-color="#8BE0BE">
+
+          <mj-text align="center" padding="0px 0px" padding-top="18px">
+            <br/>
+            Effort Burndown Trend<br/><br/>
+          </mj-text>
+          <mj-text align="center" font-size="36px" padding="0px 0px" line-height="38px">
+            {data[effortBurnVelocity]:.1f}
+          </mj-text>
+          <mj-text align="center" padding="0px 0px" padding-bottom="35px" font-size="10px" line-height="12px">
+            efforts / day
+            <br/><br/>
+          </mj-text>
+
+        </mj-column>
+        <mj-column border="1px solid white" width="33.33333333333333%" vertical-align="middle" background-color="#FDDDA2">
+
+          <mj-text align="center" padding="0px 0px" padding-top="18px">
+            <br/>
+            Avg. Effort Creation Rate<br/><br/>
+          </mj-text>
+          <mj-text align="center" font-size="36px" padding="0px 0px" line-height="38px">
+            {data[effortCreationRate]:.1f}
+          </mj-text>
+          <mj-text align="center" padding="0px 0px" padding-bottom="35px" font-size="10px" line-height="12px">
+            efforts / day
+            <br/><br/>
+          </mj-text>
+
+        </mj-column>
+      </mj-section>
+
+      <mj-section padding-top="10px" background-color="#FFFFFF" full-width="full-width" background-repeat="no-repeat">
+        <mj-column width="100%">
+          <mj-text align="center">
+            <strong><span style="font-size: 40px; color:#e85034">––</span></strong>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section vertical-align="middle" background-color="#ffffff" background-size="cover" full-width="full-width" background-repeat="no-repeat">
+        <mj-column width="100%" vertical-align="middle">
+          <mj-text align="center" font-size="14" color="#45474e" line-height="28px" padding-bottom="0" padding-top="0">
+            <span style="font-size: 26px; line-height: 34px;">At a Glance</span>
+            <br>
+            <span style="color: #e85034; font-size:12px">Other stats about the project</span>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section background-color="#ffffff" vertical-align="top" full-width="full-width" padding-top="0">
+        <mj-column vertical-align="top" width="50%">
+          <mj-image src="cid:{data[cidStatusPriorityPlot]}" alt="" padding-bottom="0" padding-top="0">
+          </mj-image>
+          <mj-text align="center" color="#9da3a3" font-size="11" padding-bottom="30" padding-top="10" line-height="1.5">
+            <span style="font-size: 14px; color: #e85034">Task Status/Priority Breakdown</span><br>Breakdown of task statuses and their number of corresponding tasks and priorities as at {data[currentDateTime]:%d %b %Y %I:%M %p}.
+          </mj-text>
+        </mj-column>
+
+        <mj-column vertical-align="top" width="50%">
+          <mj-image src="cid:{data[cidPriorityCountPlot]}" alt="" padding-bottom="0" padding-top="0">
+          </mj-image>
+          <mj-text align="center" color="#9da3a3" font-size="11" padding-bottom="30" padding-top="10" line-height="1.5">
+            <span style="font-size: 14px; color: #e85034">Task Priority Count</span><br>Number of tasks of different priorities created in the last {data[priorityCountChartStartEndDate][2].days} days.
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section background-color="#ffffff" vertical-align="top" full-width="full-width" padding-top="0">
+        <mj-column vertical-align="top" width="50%">
+          <mj-image src="cid:{data[cidDaysTakenPlot]}" alt="" padding-bottom="0" padding-top="0">
+          </mj-image>
+          <mj-text align="center" color="#9da3a3" font-size="11" padding-bottom="30" padding-top="10" line-height="1.5">
+              <span style="font-size: 14px; color: #e85034">Days Taken to Complete Tasks</span><br>Number of days taken to complete tasks of different priorities in the last {data[priorityDaysTakenStartEndDate][2].days} days.
+          </mj-text>
+        </mj-column>
+
+        <mj-column vertical-align="top" width="50%">
+          <mj-image src="cid:{data[cidDayCreatedPlot]}" alt="" padding-bottom="0" padding-top="0">
+          </mj-image>
+          <mj-text align="center" color="#9da3a3" font-size="11" padding-bottom="30" padding-top="10" line-height="1.5">
+            <span style="font-size: 14px; color: #e85034">Tasks Created on Days</span><br>Number of tasks created on day of week in the last {data[tasksCreatedOnDayStartEndDate][2].days} days.
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section background-color="#ffffff" vertical-align="top" full-width="full-width" padding-top="0">
+        <mj-column vertical-align="top" width="100%">
+          <mj-image src="cid:{data[cidTasksWordcloud]}" alt="" align="center" padding-bottom="0" padding-top="0">
+          </mj-image>
+          <mj-text align="center" color="#9da3a3" font-size="11" padding-bottom="30" padding-top="10" line-height="1.5">
+              <span style="font-size: 14px; color: #e85034">Topic Trend</span><br>Words and phrases mentioned in the last {data[tasksWordcloudStartEndDate][2].days} days.
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section background-color="#e85034" vertical-align="middle" full-width="full-width">
+        <mj-column width="100%" vertical-align="middle">
+          <mj-text align="center" color="#ffffff" font-size="20" padding-bottom="10" padding-top="25">
+            Summary
+          </mj-text>
+          <mj-divider border-color="#fff" border-style="solid" border-width="1px" padding-left="100" padding-right="100" padding-bottom="20" padding-top="20">
+
+          </mj-divider>
+          <mj-text align="center" color="#f8d5d1" font-size="12" padding-bottom="25" padding-top="20" line-height="1.8">
+            There is a total of {data[totalHeadCounts]} headcounts on this project. Considering that each work day consists of {data[effortPerDay]} hours, this amounts to a total available resource of {data[totalAvailableEffortResource]} efforts. The team is targeted to perform at {data[expectedProficiency]:.1f}% proficiency level between {data[burndownChartStartEndDate][0]:%d %b %Y} and {data[burndownChartStartEndDate][1]:%d %b %Y}. Thus, the total ideal effort to burn is {data[expectedLinearEffortToBurn]:.1f} efforts and the ideal effort burndown trend is {data[expectedEffortBurnVelocity]:.1f} efforts/day. Based on the targeted proficiency level, the team's actual effort burndown efficiency in this period is estimated to be at {data[effortEfficiencyRating]:.2f}%.<br><br>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section locked="true" full-width="full-width">
+        <mj-column width="100%" vertical-align="middle">
+          <mj-text align="center" font-size="11" locked="true" editable="false" padding-bottom="0" padding-top="0">
+            <p style="font-size: 11px">Project data retrieved on {data[currentDateTime]:%d %b %Y at %I:%M %p}.</p>
+          </mj-text>
+          <mj-text align="center" font-size="11" locked="true" editable="true" padding-bottom="0" padding-top="0">
+            <p style="font-size: 11px">Seth's ACE Reporter - v{data[appVersion]}</p>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    </mj-container>
+  </mj-body>
+</mjml>
