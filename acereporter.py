@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # coding: utf-8
 
-# In[5]:
+# In[3]:
 
 
 #get_ipython().magic('matplotlib inline')
@@ -26,7 +26,7 @@ from pprint import pprint
 import requests
 
 
-# In[6]:
+# In[4]:
 
 import argparse
 
@@ -71,7 +71,7 @@ if args.proj is None or args.aceid is None or args.acepw is None or args.rcpts i
     raise ValueError('Parameter proj, aceid, acepw or rcpts cannot be undefined.')
 
 
-# In[7]:
+# In[5]:
 
 PROJECT_ID = args.proj      #46-SS 35-Phi
 REPORT_RECIPIENTS = args.rcpts
@@ -113,10 +113,10 @@ EMAIL_SENDER_NAME = args.sender_name
 EMAIL_SENDER_ADDR = args.sender_email
 
 CONVERT_SVG2PNG = args.CONVERT_SVG2PNG
-APP_VERSION = '0.2.0'
+APP_VERSION = '0.2.1'
 
 
-# In[8]:
+# In[6]:
 
 if NOTEBOOK_MODE is False:
     import matplotlib
@@ -128,7 +128,7 @@ from matplotlib.ticker import MaxNLocator
 import seaborn as sns
 
 
-# In[9]:
+# In[7]:
 
 class ApiRequest:
     
@@ -157,7 +157,7 @@ class ApiRequest:
         return res['results']
 
 
-# In[10]:
+# In[8]:
 
 class BaseObject:
     
@@ -167,7 +167,7 @@ class BaseObject:
         self.request = ApiRequest(ACE_ACCID, ACE_USERID, ACE_PASSWORD)
 
 
-# In[11]:
+# In[9]:
 
 class TaskStatus(Enum):
     ON_HOLD = 'On Hold'
@@ -203,7 +203,7 @@ class TaskStatus(Enum):
 #TaskStatus.getStatus('Completed')
 
 
-# In[12]:
+# In[10]:
 
 class Task(BaseObject):
     
@@ -313,7 +313,7 @@ class Task(BaseObject):
     
 
 
-# In[13]:
+# In[11]:
 
 if False:
     task = Task(3395)
@@ -322,7 +322,7 @@ if False:
     print(status)
 
 
-# In[14]:
+# In[12]:
 
 class Project(BaseObject):
 
@@ -410,14 +410,14 @@ class Project(BaseObject):
  
 
 
-# In[15]:
+# In[13]:
 
 def daterange(start_date, end_date):
     for n in range(int ((end_date - start_date).days)):
         yield start_date + datetime.timedelta(n)
 
 
-# In[16]:
+# In[14]:
 
 def num_of_weekends(date1, date2):
     begin = date1
@@ -432,13 +432,13 @@ def num_of_weekends(date1, date2):
     return num_thur_fri
 
 
-# In[17]:
+# In[15]:
 
 project = Project(PROJECT_ID, numMembers=NUM_HEADCOUNT, expectedProficiency=TARGET_PROFICIENCY_LEVEL) 
 project.projectName
 
 
-# In[ ]:
+# In[16]:
 
 burndown_startDate = datetime.datetime.now()-datetime.timedelta(days=BURNDOWN_LAST_NUM_DAYS)
 burndown_endDate = datetime.datetime.now()
@@ -533,7 +533,7 @@ burndown_df = pd.DataFrame({'id': np.arange(len(x_dates)), 'x': x_dates, 'daily_
 
 
 
-# In[ ]:
+# In[17]:
 
 burndown_df
 
@@ -543,7 +543,7 @@ burndown_df
 
 
 
-# In[ ]:
+# In[18]:
 
 burndown_remaining_gradient = 0
 burndown_ideals_gradient = 0
@@ -640,7 +640,7 @@ burndownChartImage = plotBurndownChart(burndown_df)
 
 
 
-# In[ ]:
+# In[19]:
 
 def getTasksDataFrame(inProgressBufferDays=0, attributes=[]):
     tasks = project.tasks
@@ -722,13 +722,13 @@ def getTasksDataFrame(inProgressBufferDays=0, attributes=[]):
     
 
 
-# In[ ]:
+# In[20]:
 
 gantt_df = getTasksDataFrame(inProgressBufferDays=0)
 gantt_df
 
 
-# In[ ]:
+# In[21]:
 
 def convertCategoryAsResource(dataList):
     catList = []
@@ -765,7 +765,7 @@ for idx, task in gantt_df.iterrows():
     projectChart.add_task(t)
 
 
-# In[ ]:
+# In[22]:
 
 gantt_filename = 'tmp_gantt2.svg'
 gantt_startDate = datetime.datetime.now()-datetime.timedelta(days=GANTT_PAST_NUM_DAYS)
@@ -774,7 +774,7 @@ projectChart.make_svg_for_tasks(filename=gantt_filename,
                      today=datetime.datetime.now().date(), start=gantt_startDate.date(), end=gantt_endDate.date())
 
 
-# In[ ]:
+# In[23]:
 
 gantt_base64Image = None
 if CONVERT_SVG2PNG:
@@ -809,7 +809,7 @@ if CONVERT_SVG2PNG:
 
 
 
-# In[ ]:
+# In[24]:
 
 if NOTEBOOK_MODE is True:
     from IPython.core.display import display, HTML
@@ -824,7 +824,7 @@ if NOTEBOOK_MODE is True:
 
 
 
-# In[ ]:
+# In[25]:
 
 def plotPriorityChart(startDate, endDate):
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -846,14 +846,14 @@ priorityPlotEndDate = datetime.datetime.now()
 priorityPlotImage = plotPriorityChart(priorityPlotStartDate, priorityPlotEndDate)
 
 
-# In[ ]:
+# In[26]:
 
 if NOTEBOOK_MODE is True:
     from IPython.core.display import display, HTML
     #display(HTML('<img src="data:image/jpg;base64, {}"/>'.format(statusPlotImage.decode('utf8'))))
 
 
-# In[ ]:
+# In[27]:
 
 def plotStatusChart():
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -911,7 +911,7 @@ def plotStatusChart():
 statusPlotImage = plotStatusChart()
 
 
-# In[ ]:
+# In[28]:
 
 def plotPriorityDaysTaken(startDate, endDate):
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -934,7 +934,7 @@ priorityDaysPlotEndDate = datetime.datetime.now()
 priorityDaysPlotImage = plotPriorityDaysTaken(priorityDaysPlotStartDate, priorityDaysPlotEndDate)
 
 
-# In[ ]:
+# In[29]:
 
 def plotTasksDayCreated(startDate, endDate):
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -956,7 +956,7 @@ tasksDayCreatedPlotEndDate = datetime.datetime.now()
 tasksDayCreatedPlotImage = plotTasksDayCreated(tasksDayCreatedPlotStartDate, tasksDayCreatedPlotEndDate)
 
 
-# In[ ]:
+# In[49]:
 
 def plotProjectWordcloud(startDate, endDate):
     from bs4 import BeautifulSoup
@@ -971,9 +971,9 @@ def plotProjectWordcloud(startDate, endDate):
     df = getTasksDataFrame(attributes=['TASK_DESC_CREATOR', 'TASK_GROUP_NAME', 'TASK_TYPE_NAME', 'DATE_TASK_MODIFIED', 'ASSIGNED', 'REVIEWER'])
     df = df[df['DATE_TASK_MODIFIED'].dt.date >= startDate.date()][df['DATE_TASK_MODIFIED'].dt.date <= endDate.date()]
     for idx, task in df.iterrows():
-        comments = [comment['NEW_VALUE'] for comment in project.getTaskObject(task['TASK_ID']).comments]
+        comments = [comment['NEW_VALUE'] + ' ' + task['TASK_RESUME'] for comment in project.getTaskObject(task['TASK_ID']).comments]
         comments_str = ' '.join(comments)
-        tasktext = task['TASK_DESC_CREATOR'] + ' ' + task['TASK_RESUME'] + ' ' + comments_str + task['TASK_GROUP_NAME'] + task['TASK_TYPE_NAME']
+        tasktext = task['TASK_DESC_CREATOR'] + ' ' + task['TASK_RESUME'] + ' ' + comments_str + ' ' + task['TASK_GROUP_NAME'] + ' ' + task['TASK_TYPE_NAME']
         
         tasktext = BeautifulSoup(tasktext, 'lxml').text
         tasktext =  re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', tasktext)
@@ -988,7 +988,9 @@ def plotProjectWordcloud(startDate, endDate):
     #print(len(words))
     
     stopwords = set(STOPWORDS)
-    other_stopwords = ['http', 'https', 'will', 'see', 'thank', 'thanks', 'compressing', 'please', 'hi', 'regards']
+    f = open('stopwords.txt', 'r')
+    other_stopwords = [word.strip() for word in f.readlines()]
+    f.close()
     other_stopwords.extend(set(taskmembers))
     for word in other_stopwords:
         stopwords.add(word)

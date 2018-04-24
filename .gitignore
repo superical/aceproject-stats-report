@@ -103,3 +103,4 @@ ENV/
 # project related
 .idea
 production.Dockerfile
+stopwords.txt
