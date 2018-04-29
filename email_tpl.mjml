@@ -36,6 +36,7 @@
         </mj-column>
       </mj-section>
 
+      <!-- Start of Effort Chart -->
       <mj-section padding-top="0px" background-color="#FFFFFF" full-width="full-width" background-repeat="no-repeat">
         <mj-column width="100%">
           <mj-text align="center">
@@ -104,6 +105,7 @@
 
         </mj-column>
       </mj-section>
+      <!-- End of Effort Chart -->
 
       <mj-section padding-top="10px" background-color="#FFFFFF" full-width="full-width" background-repeat="no-repeat">
         <mj-column width="100%">

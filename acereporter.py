@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # coding: utf-8
 
-# In[3]:
+# In[1]:
 
 
 #get_ipython().magic('matplotlib inline')
@@ -26,7 +26,7 @@ from pprint import pprint
 import requests
 
 
-# In[4]:
+# In[59]:
 
 import argparse
 
@@ -59,6 +59,9 @@ argparser.set_defaults(CONVERT_SVG2PNG=True)
 argparser.add_argument('--notebook-mode', dest='notebook_mode', action='store_true')
 argparser.set_defaults(notebook_mode=False)
 
+argparser.add_argument('--hide-effortchart', dest='hide_effortchart', action='store_true')
+argparser.set_defaults(hide_effortchart=False)
+
 argparser.add_argument('--sender-name', nargs='?', default=os.environ.get('EMAIL_SENDER_NAME'), type=str)
 argparser.add_argument('--sender-email', nargs='?', default=os.environ.get('EMAIL_SENDER_ADDR'), type=str)
 
@@ -71,9 +74,9 @@ if args.proj is None or args.aceid is None or args.acepw is None or args.rcpts i
     raise ValueError('Parameter proj, aceid, acepw or rcpts cannot be undefined.')
 
 
-# In[5]:
+# In[60]:
 
-PROJECT_ID = args.proj      #46-SS 35-Phi
+PROJECT_ID = args.proj
 REPORT_RECIPIENTS = args.rcpts
 
 """
@@ -109,6 +112,8 @@ SENDGRID_API_KEY = args.sendgrid_key
 
 NOTEBOOK_MODE = args.notebook_mode
 
+HIDE_EFFORTCHART = args.hide_effortchart
+
 EMAIL_SENDER_NAME = args.sender_name
 EMAIL_SENDER_ADDR = args.sender_email
 
@@ -116,7 +121,7 @@ CONVERT_SVG2PNG = args.CONVERT_SVG2PNG
 APP_VERSION = '0.2.1'
 
 
-# In[6]:
+# In[4]:
 
 if NOTEBOOK_MODE is False:
     import matplotlib
@@ -128,7 +133,7 @@ from matplotlib.ticker import MaxNLocator
 import seaborn as sns
 
 
-# In[7]:
+# In[5]:
 
 class ApiRequest:
     
@@ -157,7 +162,7 @@ class ApiRequest:
         return res['results']
 
 
-# In[8]:
+# In[6]:
 
 class BaseObject:
     
@@ -167,7 +172,7 @@ class BaseObject:
         self.request = ApiRequest(ACE_ACCID, ACE_USERID, ACE_PASSWORD)
 
 
-# In[9]:
+# In[7]:
 
 class TaskStatus(Enum):
     ON_HOLD = 'On Hold'
@@ -203,7 +208,7 @@ class TaskStatus(Enum):
 #TaskStatus.getStatus('Completed')
 
 
-# In[10]:
+# In[8]:
 
 class Task(BaseObject):
     
@@ -313,7 +318,7 @@ class Task(BaseObject):
     
 
 
-# In[11]:
+# In[9]:
 
 if False:
     task = Task(3395)
@@ -322,7 +327,7 @@ if False:
     print(status)
 
 
-# In[12]:
+# In[10]:
 
 class Project(BaseObject):
 
@@ -410,14 +415,14 @@ class Project(BaseObject):
  
 
 
-# In[13]:
+# In[11]:
 
 def daterange(start_date, end_date):
     for n in range(int ((end_date - start_date).days)):
         yield start_date + datetime.timedelta(n)
 
 
-# In[14]:
+# In[12]:
 
 def num_of_weekends(date1, date2):
     begin = date1
@@ -432,13 +437,13 @@ def num_of_weekends(date1, date2):
     return num_thur_fri
 
 
-# In[15]:
+# In[13]:
 
 project = Project(PROJECT_ID, numMembers=NUM_HEADCOUNT, expectedProficiency=TARGET_PROFICIENCY_LEVEL) 
 project.projectName
 
 
-# In[16]:
+# In[14]:
 
 burndown_startDate = datetime.datetime.now()-datetime.timedelta(days=BURNDOWN_LAST_NUM_DAYS)
 burndown_endDate = datetime.datetime.now()
@@ -533,7 +538,7 @@ burndown_df = pd.DataFrame({'id': np.arange(len(x_dates)), 'x': x_dates, 'daily_
 
 
 
-# In[17]:
+# In[15]:
 
 burndown_df
 
@@ -543,7 +548,7 @@ burndown_df
 
 
 
-# In[18]:
+# In[16]:
 
 burndown_remaining_gradient = 0
 burndown_ideals_gradient = 0
@@ -640,7 +645,7 @@ burndownChartImage = plotBurndownChart(burndown_df)
 
 
 
-# In[19]:
+# In[17]:
 
 def getTasksDataFrame(inProgressBufferDays=0, attributes=[]):
     tasks = project.tasks
@@ -722,13 +727,13 @@ def getTasksDataFrame(inProgressBufferDays=0, attributes=[]):
     
 
 
-# In[20]:
+# In[18]:
 
 gantt_df = getTasksDataFrame(inProgressBufferDays=0)
 gantt_df
 
 
-# In[21]:
+# In[19]:
 
 def convertCategoryAsResource(dataList):
     catList = []
@@ -765,7 +770,7 @@ for idx, task in gantt_df.iterrows():
     projectChart.add_task(t)
 
 
-# In[22]:
+# In[20]:
 
 gantt_filename = 'tmp_gantt2.svg'
 gantt_startDate = datetime.datetime.now()-datetime.timedelta(days=GANTT_PAST_NUM_DAYS)
@@ -774,7 +779,7 @@ projectChart.make_svg_for_tasks(filename=gantt_filename,
                      today=datetime.datetime.now().date(), start=gantt_startDate.date(), end=gantt_endDate.date())
 
 
-# In[23]:
+# In[21]:
 
 gantt_base64Image = None
 if CONVERT_SVG2PNG:
@@ -809,7 +814,7 @@ if CONVERT_SVG2PNG:
 
 
 
-# In[24]:
+# In[22]:
 
 if NOTEBOOK_MODE is True:
     from IPython.core.display import display, HTML
@@ -824,7 +829,7 @@ if NOTEBOOK_MODE is True:
 
 
 
-# In[25]:
+# In[23]:
 
 def plotPriorityChart(startDate, endDate):
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -846,14 +851,14 @@ priorityPlotEndDate = datetime.datetime.now()
 priorityPlotImage = plotPriorityChart(priorityPlotStartDate, priorityPlotEndDate)
 
 
-# In[26]:
+# In[24]:
 
 if NOTEBOOK_MODE is True:
     from IPython.core.display import display, HTML
     #display(HTML('<img src="data:image/jpg;base64, {}"/>'.format(statusPlotImage.decode('utf8'))))
 
 
-# In[27]:
+# In[25]:
 
 def plotStatusChart():
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -911,7 +916,7 @@ def plotStatusChart():
 statusPlotImage = plotStatusChart()
 
 
-# In[28]:
+# In[26]:
 
 def plotPriorityDaysTaken(startDate, endDate):
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -934,7 +939,7 @@ priorityDaysPlotEndDate = datetime.datetime.now()
 priorityDaysPlotImage = plotPriorityDaysTaken(priorityDaysPlotStartDate, priorityDaysPlotEndDate)
 
 
-# In[29]:
+# In[27]:
 
 def plotTasksDayCreated(startDate, endDate):
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -956,7 +961,7 @@ tasksDayCreatedPlotEndDate = datetime.datetime.now()
 tasksDayCreatedPlotImage = plotTasksDayCreated(tasksDayCreatedPlotStartDate, tasksDayCreatedPlotEndDate)
 
 
-# In[49]:
+# In[28]:
 
 def plotProjectWordcloud(startDate, endDate):
     from bs4 import BeautifulSoup
@@ -1021,7 +1026,7 @@ plotProjectWordcloudEndDate = datetime.datetime.now()
 plotProjectWordcloudImage = plotProjectWordcloud(plotProjectWordcloudStartDate, plotProjectWordcloudEndDate)
 
 
-# In[ ]:
+# In[29]:
 
 report_df = getTasksDataFrame(attributes=['DATE_EXPECTED_END_TASK', 'ESTIMATED_TIME'])
 uncompletedTasks_df = report_df[~report_df['STATUS'].isin(TaskStatus.getCompletedStatuses() + [TaskStatus.ON_HOLD])]
@@ -1029,7 +1034,7 @@ needToUpdateEstimatedEndDate = uncompletedTasks_df[uncompletedTasks_df['END_DATE
 needToUpdateEstimatedEffort = uncompletedTasks_df[uncompletedTasks_df['ESTIMATED_TIME'] <= 0.0]
 
 
-# In[ ]:
+# In[30]:
 
 for idx, task in needToUpdateEstimatedEndDate.iterrows():
     print(task['TASK_RESUME'])
@@ -1037,13 +1042,13 @@ for idx, task in needToUpdateEstimatedEndDate.iterrows():
 needToUpdateEstimatedEndDate
 
 
-# In[ ]:
+# In[31]:
 
 for idx, task in needToUpdateEstimatedEffort.iterrows():
     print(task['TASK_RESUME'])
 
 
-# In[ ]:
+# In[32]:
 
 uatTasks_df = getTasksDataFrame(attributes=['DATE_TASK_MODIFIED'])
 uatTasks_df = uatTasks_df[uatTasks_df['STATUS'] == TaskStatus.READY_FOR_UAT]
@@ -1058,7 +1063,7 @@ for idx, task in uatTasks_df.iterrows():
 
 
 
-# In[ ]:
+# In[33]:
 
 createdSinceTasks_df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
 createdSinceTasks_df = createdSinceTasks_df[~createdSinceTasks_df['STATUS'].isin(TaskStatus.getCompletedStatuses() + [TaskStatus.ON_HOLD])]
@@ -1070,7 +1075,7 @@ for idx, task in createdSinceTasks_df.iterrows():
     print(task['TASK_RESUME'], '\t\t\t', task['STATUS_LABEL'], '\t', daysAgo)
 
 
-# In[ ]:
+# In[61]:
 
 import uuid
 emailData = {
@@ -1099,6 +1104,7 @@ emailData = {
     'cidDaysTakenPlot': 'daystakenplot-{}'.format(str(uuid.uuid4())),
     'cidDayCreatedPlot': 'daycreatedplot-{}'.format(str(uuid.uuid4())),
     'cidTasksWordcloud': 'taskswordcloudplot-{}'.format(str(uuid.uuid4())),
+    'hideEffortChart': HIDE_EFFORTCHART,
     'currentDateTime': datetime.datetime.now(),
     'appVersion': APP_VERSION
 }
@@ -1111,22 +1117,17 @@ pprint(emailData)
 
 
 
-# In[ ]:
-
-
-
-
-# In[ ]:
+# In[35]:
 
 import emailhtml
 
 
-# In[ ]:
+# In[63]:
 
 emailHtmlBody = emailhtml.emailHtmlBody(emailData)
 
 
-# In[ ]:
+# In[64]:
 
 emailHtmlHeader = emailhtml.emailHtmlHeader()
 emailHtmlFooter = emailhtml.emailHtmlFooter()
@@ -1141,19 +1142,19 @@ emailHtml = emailHtml.replace('\n', '')
 
 
 
-# In[ ]:
+# In[38]:
 
 import sendgrid
 from sendgrid.helpers.mail import *
 
 
-# In[ ]:
+# In[39]:
 
 if NOTEBOOK_MODE == True:
     raise ValueError('Breaking script before sending email...')
 
 
-# In[ ]:
+# In[65]:
 
 sg = sendgrid.SendGridAPIClient(apikey=SENDGRID_API_KEY)
 from_email = Email(EMAIL_SENDER_ADDR, EMAIL_SENDER_NAME)
@@ -1237,11 +1238,6 @@ response = sg.client.mail.send.post(request_body=mail.get())
 print(response.status_code)
 print(response.body)
 print(response.headers)
-
-
-# In[ ]:
-
-EMAIL_SENDER_ADDR
 
 
 # In[ ]:

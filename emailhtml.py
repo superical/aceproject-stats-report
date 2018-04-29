@@ -1,4 +1,9 @@
 def emailHtmlBody(emailData):
+    if emailData['hideEffortChart'] is False:
+        emailData['effortChartHtml'] = getEffortChartHtml(emailData)
+    else:
+        emailData['effortChartHtml'] = ''
+
     emailHtmlBody = """
     <body style="background-color:#d7dde5;">
 
@@ -289,380 +294,7 @@ def emailHtmlBody(emailData):
       </tbody>
     </table>
 
-    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#FFFFFF;background-color:#FFFFFF;width:100%;">
-      <tbody>
-        <tr>
-          <td>
-
-
-            <!--[if mso | IE]>
-      <table
-         align="center" border="0" cellpadding="0" cellspacing="0" style="width:1000px;" width="1000"
-      >
-        <tr>
-          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-      <![endif]-->
-
-
-            <div style="Margin:0px auto;max-width:1000px;">
-
-              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
-                <tbody>
-                  <tr>
-                    <td style="direction:ltr;font-size:0px;padding:20px 0;padding-top:0px;text-align:center;vertical-align:top;">
-                      <!--[if mso | IE]>
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                
-        <tr>
-      
-            <td
-               style="vertical-align:top;width:1000px;"
-            >
-          <![endif]-->
-
-                      <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
-
-                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
-
-                          <tr>
-                            <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:center;color:#000000;">
-                                <strong><span style="font-size: 40px; color:#e85034">––</span></strong>
-                              </div>
-
-                            </td>
-                          </tr>
-
-                        </table>
-
-                      </div>
-
-                      <!--[if mso | IE]>
-            </td>
-          
-        </tr>
-      
-                  </table>
-                <![endif]-->
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-            </div>
-
-
-            <!--[if mso | IE]>
-          </td>
-        </tr>
-      </table>
-      <![endif]-->
-
-
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;background-color:#ffffff;width:100%;">
-      <tbody>
-        <tr>
-          <td>
-
-
-            <!--[if mso | IE]>
-      <table
-         align="center" border="0" cellpadding="0" cellspacing="0" style="width:1000px;" width="1000"
-      >
-        <tr>
-          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-      <![endif]-->
-
-
-            <div style="Margin:0px auto;max-width:1000px;">
-
-              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
-                <tbody>
-                  <tr>
-                    <td style="direction:ltr;font-size:0px;padding:0px 0px;text-align:center;vertical-align:middle;">
-                      <!--[if mso | IE]>
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                
-        <tr>
-      
-            <td
-               style="vertical-align:middle;width:1000px;"
-            >
-          <![endif]-->
-
-                      <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
-
-                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
-
-                          <tr>
-                            <td align="center" style="font-size:0px;padding:10px 25px;padding-top:0;padding-bottom:10px;word-break:break-word;">
-
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:14px;line-height:28px;text-align:center;color:#45474e;">
-                                <span style="font-size: 26px; line-height: 34px;">Effort Chart</span>
-                                <br>
-                                <span style="color: #e85034; font-size:12px">Effort burndown from {data[burndownChartStartEndDate][0]:%d %b %Y} to {data[burndownChartStartEndDate][1]:%d %b %Y, %I:%M %p}</span>
-                                <br>
-                                <span style="color: #e85034; font-size:12px; line-height:8px">Team proficiency targeted at {data[expectedProficiency]:.1f}%</span>
-                              </div>
-
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td align="center" style="font-size:0px;padding:0px;word-break:break-word;">
-
-                              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
-                                <tbody>
-                                  <tr>
-                                    <td style="width:1000px;">
-
-                                      <img height="auto" src="cid:{data[cidBurndown]}" style="border:none;display:block;outline:none;text-decoration:none;width:100%;" width="1000" />
-
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-
-                            </td>
-                          </tr>
-
-                        </table>
-
-                      </div>
-
-                      <!--[if mso | IE]>
-            </td>
-          
-        </tr>
-      
-                  </table>
-                <![endif]-->
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-            </div>
-
-
-            <!--[if mso | IE]>
-          </td>
-        </tr>
-      </table>
-      <![endif]-->
-
-
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;background-color:#ffffff;width:100%;">
-      <tbody>
-        <tr>
-          <td>
-
-
-            <!--[if mso | IE]>
-      <table
-         align="center" border="0" cellpadding="0" cellspacing="0" style="width:1000px;" width="1000"
-      >
-        <tr>
-          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-      <![endif]-->
-
-
-            <div style="Margin:0px auto;max-width:1000px;">
-
-              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
-                <tbody>
-                  <tr>
-                    <td style="direction:ltr;font-size:0px;padding:0px 0px;text-align:center;vertical-align:middle;">
-                      <!--[if mso | IE]>
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                
-        <tr>
-      
-            <td
-               style="vertical-align:middle;width:333.33333333333326px;"
-            >
-          <![endif]-->
-
-                      <div class="mj-column-per-33 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
-
-                        <table background="#FC9886" border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
-                          <tbody>
-                            <tr>
-                              <td style="background-color:#FC9886;border:1px solid white;vertical-align:middle;padding:0px;">
-
-                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
-
-                                  <tr>
-                                    <td align="center" style="font-size:0px;padding:0px 0px;padding-top:18px;word-break:break-word;">
-
-                                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:center;color:#000000;">
-                                        <br/> Total Efforts Burnt<br/><br/>
-                                      </div>
-
-                                    </td>
-                                  </tr>
-
-                                  <tr>
-                                    <td align="center" style="font-size:0px;padding:0px 0px;word-break:break-word;">
-
-                                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:36px;line-height:38px;text-align:center;color:#000000;">
-                                        {data[totalEffortBurnt]}
-                                      </div>
-
-                                    </td>
-                                  </tr>
-
-                                  <tr>
-                                    <td align="center" style="font-size:0px;padding:0px 0px;padding-bottom:35px;word-break:break-word;">
-
-                                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:10px;line-height:12px;text-align:center;color:#000000;">
-                                        effort hours
-                                        <br/><br/>
-                                      </div>
-
-                                    </td>
-                                  </tr>
-
-                                </table>
-
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-
-                      </div>
-
-                      <!--[if mso | IE]>
-            </td>
-          
-            <td
-               style="vertical-align:middle;width:333.33333333333326px;"
-            >
-          <![endif]-->
-
-                      <div class="mj-column-per-33 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
-
-                        <table background="#8BE0BE" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#8BE0BE;border:1px solid white;vertical-align:middle;" width="100%">
-
-                          <tr>
-                            <td align="center" style="font-size:0px;padding:0px 0px;padding-top:18px;word-break:break-word;">
-
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:center;color:#000000;">
-                                <br/> Effort Burndown Trend<br/><br/>
-                              </div>
-
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td align="center" style="font-size:0px;padding:0px 0px;word-break:break-word;">
-
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:36px;line-height:38px;text-align:center;color:#000000;">
-                                {data[effortBurnVelocity]:.1f}
-                              </div>
-
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td align="center" style="font-size:0px;padding:0px 0px;padding-bottom:35px;word-break:break-word;">
-
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:10px;line-height:12px;text-align:center;color:#000000;">
-                                efforts / day
-                                <br/><br/>
-                              </div>
-
-                            </td>
-                          </tr>
-
-                        </table>
-
-                      </div>
-
-                      <!--[if mso | IE]>
-            </td>
-          
-            <td
-               style="vertical-align:middle;width:333.33333333333326px;"
-            >
-          <![endif]-->
-
-                      <div class="mj-column-per-33 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
-
-                        <table background="#FDDDA2" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#FDDDA2;border:1px solid white;vertical-align:middle;" width="100%">
-
-                          <tr>
-                            <td align="center" style="font-size:0px;padding:0px 0px;padding-top:18px;word-break:break-word;">
-
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:center;color:#000000;">
-                                <br/> Avg. Effort Creation Rate<br/><br/>
-                              </div>
-
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td align="center" style="font-size:0px;padding:0px 0px;word-break:break-word;">
-
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:36px;line-height:38px;text-align:center;color:#000000;">
-                                {data[effortCreationRate]:.1f}
-                              </div>
-
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td align="center" style="font-size:0px;padding:0px 0px;padding-bottom:35px;word-break:break-word;">
-
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:10px;line-height:12px;text-align:center;color:#000000;">
-                                efforts / day
-                                <br/><br/>
-                              </div>
-
-                            </td>
-                          </tr>
-
-                        </table>
-
-                      </div>
-
-                      <!--[if mso | IE]>
-            </td>
-          
-        </tr>
-      
-                  </table>
-                <![endif]-->
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-            </div>
-
-
-            <!--[if mso | IE]>
-          </td>
-        </tr>
-      </table>
-      <![endif]-->
-
-
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    {data[effortChartHtml]}
 
     <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#FFFFFF;background-color:#FFFFFF;width:100%;">
       <tbody>
@@ -1258,7 +890,7 @@ def emailHtmlBody(emailData):
                           <tr>
                             <td align="center" style="font-size:0px;padding:10px 25px;padding-top:20;padding-bottom:25px;word-break:break-word;">
 
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:12px;line-height:22px;text-align:center;color:#f8d5d1;">
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:12px;line-height:1.8;text-align:center;color:#f8d5d1;">
                                 There is a total of {data[totalHeadCounts]} headcounts on this project. Considering that each work day consists of {data[effortPerDay]} hours, this amounts to a total available resource of {data[totalAvailableEffortResource]} efforts. The team is targeted
                                 to perform at {data[expectedProficiency]:.1f}% proficiency level between {data[burndownChartStartEndDate][0]:%d %b %Y} and {data[burndownChartStartEndDate][1]:%d %b %Y}. Thus, the total ideal effort to burn is {data[expectedLinearEffortToBurn]:.1f}
                                 efforts and the ideal effort burndown trend is {data[expectedEffortBurnVelocity]:.1f} efforts/day. Based on the targeted proficiency level, the team's actual effort burndown efficiency in this period is estimated to be
@@ -1390,6 +1022,386 @@ def emailHtmlBody(emailData):
 </body>
     """.format(data=emailData).replace('\n','')
     return emailHtmlBody
+
+def getEffortChartHtml(emailData):
+    return """
+        <!-- Start of Effort Chart -->
+    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#FFFFFF;background-color:#FFFFFF;width:100%;">
+      <tbody>
+        <tr>
+          <td>
+
+
+            <!--[if mso | IE]>
+      <table
+         align="center" border="0" cellpadding="0" cellspacing="0" style="width:1000px;" width="1000"
+      >
+        <tr>
+          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+      <![endif]-->
+
+
+            <div style="Margin:0px auto;max-width:1000px;">
+
+              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+                <tbody>
+                  <tr>
+                    <td style="direction:ltr;font-size:0px;padding:20px 0;padding-top:0px;text-align:center;vertical-align:top;">
+                      <!--[if mso | IE]>
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                
+        <tr>
+      
+            <td
+               style="vertical-align:top;width:1000px;"
+            >
+          <![endif]-->
+
+                      <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
+
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:center;color:#000000;">
+                                <strong><span style="font-size: 40px; color:#e85034">––</span></strong>
+                              </div>
+
+                            </td>
+                          </tr>
+
+                        </table>
+
+                      </div>
+
+                      <!--[if mso | IE]>
+            </td>
+          
+        </tr>
+      
+                  </table>
+                <![endif]-->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+
+            <!--[if mso | IE]>
+          </td>
+        </tr>
+      </table>
+      <![endif]-->
+
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;background-color:#ffffff;width:100%;">
+      <tbody>
+        <tr>
+          <td>
+
+
+            <!--[if mso | IE]>
+      <table
+         align="center" border="0" cellpadding="0" cellspacing="0" style="width:1000px;" width="1000"
+      >
+        <tr>
+          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+      <![endif]-->
+
+
+            <div style="Margin:0px auto;max-width:1000px;">
+
+              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+                <tbody>
+                  <tr>
+                    <td style="direction:ltr;font-size:0px;padding:0px 0px;text-align:center;vertical-align:middle;">
+                      <!--[if mso | IE]>
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                
+        <tr>
+      
+            <td
+               style="vertical-align:middle;width:1000px;"
+            >
+          <![endif]-->
+
+                      <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:10px 25px;padding-top:0;padding-bottom:10px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:14px;line-height:28px;text-align:center;color:#45474e;">
+                                <span style="font-size: 26px; line-height: 34px;">Effort Chart</span>
+                                <br>
+                                <span style="color: #e85034; font-size:12px">Effort burndown from {data[burndownChartStartEndDate][0]:%d %b %Y} to {data[burndownChartStartEndDate][1]:%d %b %Y, %I:%M %p}</span>
+                                <br>
+                                <span style="color: #e85034; font-size:12px; line-height:8px">Team proficiency targeted at {data[expectedProficiency]:.1f}%</span>
+                              </div>
+
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:0px;word-break:break-word;">
+
+                              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
+                                <tbody>
+                                  <tr>
+                                    <td style="width:1000px;">
+
+                                      <img height="auto" src="cid:{data[cidBurndown]}" style="border:none;display:block;outline:none;text-decoration:none;width:100%;" width="1000" />
+
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+
+                            </td>
+                          </tr>
+
+                        </table>
+
+                      </div>
+
+                      <!--[if mso | IE]>
+            </td>
+          
+        </tr>
+      
+                  </table>
+                <![endif]-->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+
+            <!--[if mso | IE]>
+          </td>
+        </tr>
+      </table>
+      <![endif]-->
+
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;background-color:#ffffff;width:100%;">
+      <tbody>
+        <tr>
+          <td>
+
+
+            <!--[if mso | IE]>
+      <table
+         align="center" border="0" cellpadding="0" cellspacing="0" style="width:1000px;" width="1000"
+      >
+        <tr>
+          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+      <![endif]-->
+
+
+            <div style="Margin:0px auto;max-width:1000px;">
+
+              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+                <tbody>
+                  <tr>
+                    <td style="direction:ltr;font-size:0px;padding:0px 0px;text-align:center;vertical-align:middle;">
+                      <!--[if mso | IE]>
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                
+        <tr>
+      
+            <td
+               style="vertical-align:middle;width:333.33333333333326px;"
+            >
+          <![endif]-->
+
+                      <div class="mj-column-per-33 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+
+                        <table background="#FC9886" border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                          <tbody>
+                            <tr>
+                              <td style="background-color:#FC9886;border:1px solid white;vertical-align:middle;padding:0px;">
+
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+
+                                  <tr>
+                                    <td align="center" style="font-size:0px;padding:0px 0px;padding-top:18px;word-break:break-word;">
+
+                                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:center;color:#000000;">
+                                        <br/> Total Efforts Burnt<br/><br/>
+                                      </div>
+
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td align="center" style="font-size:0px;padding:0px 0px;word-break:break-word;">
+
+                                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:36px;line-height:38px;text-align:center;color:#000000;">
+                                        {data[totalEffortBurnt]}
+                                      </div>
+
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td align="center" style="font-size:0px;padding:0px 0px;padding-bottom:35px;word-break:break-word;">
+
+                                      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:10px;line-height:12px;text-align:center;color:#000000;">
+                                        effort hours
+                                        <br/><br/>
+                                      </div>
+
+                                    </td>
+                                  </tr>
+
+                                </table>
+
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                      </div>
+
+                      <!--[if mso | IE]>
+            </td>
+          
+            <td
+               style="vertical-align:middle;width:333.33333333333326px;"
+            >
+          <![endif]-->
+
+                      <div class="mj-column-per-33 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+
+                        <table background="#8BE0BE" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#8BE0BE;border:1px solid white;vertical-align:middle;" width="100%">
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:0px 0px;padding-top:18px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:center;color:#000000;">
+                                <br/> Effort Burndown Trend<br/><br/>
+                              </div>
+
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:0px 0px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:36px;line-height:38px;text-align:center;color:#000000;">
+                                {data[effortBurnVelocity]:.1f}
+                              </div>
+
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:0px 0px;padding-bottom:35px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:10px;line-height:12px;text-align:center;color:#000000;">
+                                efforts / day
+                                <br/><br/>
+                              </div>
+
+                            </td>
+                          </tr>
+
+                        </table>
+
+                      </div>
+
+                      <!--[if mso | IE]>
+            </td>
+          
+            <td
+               style="vertical-align:middle;width:333.33333333333326px;"
+            >
+          <![endif]-->
+
+                      <div class="mj-column-per-33 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+
+                        <table background="#FDDDA2" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#FDDDA2;border:1px solid white;vertical-align:middle;" width="100%">
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:0px 0px;padding-top:18px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:center;color:#000000;">
+                                <br/> Avg. Effort Creation Rate<br/><br/>
+                              </div>
+
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:0px 0px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:36px;line-height:38px;text-align:center;color:#000000;">
+                                {data[effortCreationRate]:.1f}
+                              </div>
+
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:0px 0px;padding-bottom:35px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:10px;line-height:12px;text-align:center;color:#000000;">
+                                efforts / day
+                                <br/><br/>
+                              </div>
+
+                            </td>
+                          </tr>
+
+                        </table>
+
+                      </div>
+
+                      <!--[if mso | IE]>
+            </td>
+          
+        </tr>
+      
+                  </table>
+                <![endif]-->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+
+            <!--[if mso | IE]>
+          </td>
+        </tr>
+      </table>
+      <![endif]-->
+
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- End of Effort Chart -->
+    """.format(data=emailData).replace('\n','')
 
 def emailHtmlHeader():
     return """
