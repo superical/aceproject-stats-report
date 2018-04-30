@@ -8,6 +8,7 @@ docker build -f production.Dockerfile -t acereport .
 
 echo '>>> Stopping existing container (acereport_container)'
 docker stop acereport_container || true
+sleep 5
 
 echo '>>> Starting new container (acereport_container)'
 docker run --rm -d --name acereport_container acereport
