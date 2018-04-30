@@ -37,6 +37,7 @@
       </mj-section>
 
       <!-- Start of Effort Chart -->
+      {data[effortChartHtml]}
       <mj-section padding-top="0px" background-color="#FFFFFF" full-width="full-width" background-repeat="no-repeat">
         <mj-column width="100%">
           <mj-text align="center">
@@ -106,6 +107,42 @@
         </mj-column>
       </mj-section>
       <!-- End of Effort Chart -->
+
+      <!-- Start of Tasks Pending UAT -->
+      {data[pendingUatTasksHtml]}
+      <mj-section padding-top="0px" background-color="#FFFFFF" full-width="full-width" background-repeat="no-repeat">
+        <mj-column width="100%">
+          <mj-text align="center">
+            <strong><span style="font-size: 40px; color:#e85034">––</span></strong>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <mj-section vertical-align="middle" background-color="#ffffff" background-size="cover" full-width="full-width" background-repeat="no-repeat" padding="0px 0px">
+        <mj-column width="100%" vertical-align="middle">
+          <mj-text align="center" font-size="14" color="#45474e" line-height="28px" padding-bottom="10" padding-top="0">
+            <span style="font-size: 26px; line-height: 34px;">Tasks Pending UAT</span>
+            <br>
+            <span style="color: #e85034; font-size:12px">Tasks pending UAT review for more than {data[pendingUatTasksMinDays]} days</span>
+          </mj-text>
+          <mj-table align="center">
+            <tr style="border-bottom:1px solid #ecedee;text-align:left;padding:15px 0;">
+              <th style="padding: 0 15px 0 0; text-align: left;">Task Name</th>
+              <th style="padding: 0 15px; text-align: left;">Status</th>
+              <th style="padding: 0 0 0 15px; text-align: left;">Since Days Ago</th>
+            </tr>
+            <!-- Start Pending UAT Task Item -->
+            {data[pendingUatTaskRowsHtml]}
+            <tr>
+              <td style="padding: 0 15px 0 0;">{data[taskName]}</td>
+              <td style="padding: 0 15px;">{data[taskStatus]}</td>
+              <td style="padding: 0 0 0 15px;">{data[daysAgo]} days</td>
+            </tr>
+            <!-- End Pending UAT Task Item -->
+          </mj-table>
+        </mj-column>
+      </mj-section>
+      <!-- End of Tasks Pending UAT -->
 
       <mj-section padding-top="10px" background-color="#FFFFFF" full-width="full-width" background-repeat="no-repeat">
         <mj-column width="100%">

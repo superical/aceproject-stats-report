@@ -3,7 +3,7 @@ def emailHtmlBody(emailData):
         emailData['effortChartHtml'] = getEffortChartHtml(emailData)
     else:
         emailData['effortChartHtml'] = ''
-
+    emailData['pendingUatTasksHtml'] = getPendingUatTasksHtml(emailData)
     emailHtmlBody = """
     <body style="background-color:#d7dde5;">
 
@@ -295,7 +295,9 @@ def emailHtmlBody(emailData):
     </table>
 
     {data[effortChartHtml]}
-
+    
+    {data[pendingUatTasksHtml]}
+    
     <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#FFFFFF;background-color:#FFFFFF;width:100%;">
       <tbody>
         <tr>
@@ -1401,6 +1403,194 @@ def getEffortChartHtml(emailData):
       </tbody>
     </table>
     <!-- End of Effort Chart -->
+    """.format(data=emailData).replace('\n','')
+
+def getPendingUatTasksHtml(emailData):
+    pendingUatTaskRowsHtml = ''
+    for pendingTask in emailData['pendingUatTasks']:
+        html = """
+            <tr>
+              <td style="padding: 0 15px 0 0;">{data[taskName]}</td>
+              <td style="padding: 0 15px;">{data[taskStatus]}</td>
+              <td style="padding: 0 0 0 15px;">{data[daysAgo]} days</td>
+            </tr>
+        """.format(data=pendingTask)
+        pendingUatTaskRowsHtml = pendingUatTaskRowsHtml + '\n' + html
+    emailData['pendingUatTaskRowsHtml'] = pendingUatTaskRowsHtml
+
+    return """
+        <!-- Start of Tasks Pending UAT -->
+    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#FFFFFF;background-color:#FFFFFF;width:100%;">
+      <tbody>
+        <tr>
+          <td>
+
+
+            <!--[if mso | IE]>
+      <table
+         align="center" border="0" cellpadding="0" cellspacing="0" style="width:1000px;" width="1000"
+      >
+        <tr>
+          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+      <![endif]-->
+
+
+            <div style="Margin:0px auto;max-width:1000px;">
+
+              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+                <tbody>
+                  <tr>
+                    <td style="direction:ltr;font-size:0px;padding:20px 0;padding-top:0px;text-align:center;vertical-align:top;">
+                      <!--[if mso | IE]>
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                
+        <tr>
+      
+            <td
+               style="vertical-align:top;width:1000px;"
+            >
+          <![endif]-->
+
+                      <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
+
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:center;color:#000000;">
+                                <strong><span style="font-size: 40px; color:#e85034">––</span></strong>
+                              </div>
+
+                            </td>
+                          </tr>
+
+                        </table>
+
+                      </div>
+
+                      <!--[if mso | IE]>
+            </td>
+          
+        </tr>
+      
+                  </table>
+                <![endif]-->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+
+            <!--[if mso | IE]>
+          </td>
+        </tr>
+      </table>
+      <![endif]-->
+
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;background-color:#ffffff;width:100%;">
+      <tbody>
+        <tr>
+          <td>
+
+
+            <!--[if mso | IE]>
+      <table
+         align="center" border="0" cellpadding="0" cellspacing="0" style="width:1000px;" width="1000"
+      >
+        <tr>
+          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+      <![endif]-->
+
+
+            <div style="Margin:0px auto;max-width:1000px;">
+
+              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+                <tbody>
+                  <tr>
+                    <td style="direction:ltr;font-size:0px;padding:0px 0px;text-align:center;vertical-align:middle;">
+                      <!--[if mso | IE]>
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                
+        <tr>
+      
+            <td
+               style="vertical-align:middle;width:1000px;"
+            >
+          <![endif]-->
+
+                      <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:10px 25px;padding-top:0;padding-bottom:10px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:14px;line-height:28px;text-align:center;color:#45474e;">
+                                <span style="font-size: 26px; line-height: 34px;">Tasks Pending UAT</span>
+                                <br>
+                                <span style="color: #e85034; font-size:12px">Tasks pending UAT review for more than {data[pendingUatTasksMinDays]} days</span>
+                              </div>
+
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+
+                              <table 0="[object Object]" 1="[object Object]" 2="[object Object]" border="0" style="cellspacing:0;color:#000;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;table-layout:auto;width:100%;">
+                                <tr style="border-bottom:1px solid #ecedee;text-align:left;padding:15px 0;">
+                                  <th style="padding: 0 15px 0 0; text-align: left;">Task Name</th>
+                                  <th style="padding: 0 15px; text-align: left;">Status</th>
+                                  <th style="padding: 0 0 0 15px; text-align: left;">Since Days Ago</th>
+                                </tr>
+                                <!-- Start Pending UAT Task Item -->
+                                {data[pendingUatTaskRowsHtml]}
+                                <!-- End Pending UAT Task Item -->
+                              </table>
+
+                            </td>
+                          </tr>
+
+                        </table>
+
+                      </div>
+
+                      <!--[if mso | IE]>
+            </td>
+          
+        </tr>
+      
+                  </table>
+                <![endif]-->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+
+            <!--[if mso | IE]>
+          </td>
+        </tr>
+      </table>
+      <![endif]-->
+
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- End of Tasks Pending UAT -->
     """.format(data=emailData).replace('\n','')
 
 def emailHtmlHeader():
