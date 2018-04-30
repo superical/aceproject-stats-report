@@ -28,7 +28,8 @@ RUN printenv | grep -v "NO_PROXY" >> /etc/environment
 RUN touch /var/log/cron-ss.log
 RUN touch /var/log/cron-ph.log
 RUN printf "15 9 * * 1  cd /usr/src/acereport && /usr/local/bin/python /usr/src/acereport/main.py --proj ## --targetprof 0.3 --headcount 5 --rcpts  >> /var/log/cron-ss.log 2>&1\n\
-18 9 * * 1 cd /usr/src/acereport && /usr/local/bin/python /usr/src/acereport/main.py --proj ## --targetprof 0.3 --headcount 2 --rcpts  >> /var/log/cron-ph.log 2>&1\n" > cronfile
+18 9 * * 1 cd /usr/src/acereport && /usr/local/bin/python /usr/src/acereport/main.py --proj ## --targetprof 0.3 --headcount 2 --rcpts  >> /var/log/cron-ph.log 2>&1\n\
+30 9 1 * * cd /usr/src/acereport && /usr/local/bin/python /usr/src/acereport/main.py --proj 35 --targetprof 0.3 --headcount 2 --hide-effortchart --PLOT_WORDCLOUD_LAST_NUM_DAYS 30 --rcpts  >> /var/log/cron-ph.log 2>&1\n" > cronfile
 
 CMD service cron start \
     && crontab cronfile \

@@ -4,6 +4,12 @@ def emailHtmlBody(emailData):
     else:
         emailData['effortChartHtml'] = ''
     emailData['pendingUatTasksHtml'] = getPendingUatTasksHtml(emailData)
+
+    if emailData['useDetailedSummary'] is True:
+        emailData['summaryHtml'] = getDetailedSummaryHtml(emailData)
+    else:
+        emailData['summaryHtml'] = getSimpleSummaryHtml(emailData)
+
     emailHtmlBody = """
     <body style="background-color:#d7dde5;">
 
@@ -821,118 +827,11 @@ def emailHtmlBody(emailData):
         </tr>
       </tbody>
     </table>
-
-    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#e85034;background-color:#e85034;width:100%;">
-      <tbody>
-        <tr>
-          <td>
-
-
-            <!--[if mso | IE]>
-      <table
-         align="center" border="0" cellpadding="0" cellspacing="0" style="width:1000px;" width="1000"
-      >
-        <tr>
-          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-      <![endif]-->
-
-
-            <div style="Margin:0px auto;max-width:1000px;">
-
-              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
-                <tbody>
-                  <tr>
-                    <td style="direction:ltr;font-size:0px;padding:20px 0;text-align:center;vertical-align:middle;">
-                      <!--[if mso | IE]>
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                
-        <tr>
-      
-            <td
-               style="vertical-align:middle;width:1000px;"
-            >
-          <![endif]-->
-
-                      <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
-
-                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
-
-                          <tr>
-                            <td align="center" style="font-size:0px;padding:10px 25px;padding-top:25;padding-bottom:10px;word-break:break-word;">
-
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:20px;line-height:1;text-align:center;color:#ffffff;">
-                                Summary
-                              </div>
-
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td style="font-size:0px;padding:10px 25px;padding-top:20;padding-right:100px;padding-bottom:20px;padding-left:100px;word-break:break-word;">
-
-                              <p style="border-top:solid 1px #fff;font-size:1;margin:0px auto;width:100%;">
-                              </p>
-
-                              <!--[if mso | IE]>
-        <table
-           align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 1px #fff;font-size:1;margin:0px auto;width:800px;" role="presentation" width="800px"
-        >
-          <tr>
-            <td style="height:0;line-height:0;">
-              &nbsp;
-            </td>
-          </tr>
-        </table>
-      <![endif]-->
-
-
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td align="center" style="font-size:0px;padding:10px 25px;padding-top:20;padding-bottom:25px;word-break:break-word;">
-
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:12px;line-height:1.8;text-align:center;color:#f8d5d1;">
-                                There is a total of {data[totalHeadCounts]} headcounts on this project. Considering that each work day consists of {data[effortPerDay]} hours, this amounts to a total available resource of {data[totalAvailableEffortResource]} efforts. The team is targeted
-                                to perform at {data[expectedProficiency]:.1f}% proficiency level between {data[burndownChartStartEndDate][0]:%d %b %Y} and {data[burndownChartStartEndDate][1]:%d %b %Y}. Thus, the total ideal effort to burn is {data[expectedLinearEffortToBurn]:.1f}
-                                efforts and the ideal effort burndown trend is {data[expectedEffortBurnVelocity]:.1f} efforts/day. Based on the targeted proficiency level, the team's actual effort burndown efficiency in this period is estimated to be
-                                at {data[effortEfficiencyRating]:.2f}%.<br><br>
-                              </div>
-
-                            </td>
-                          </tr>
-
-                        </table>
-
-                      </div>
-
-                      <!--[if mso | IE]>
-            </td>
-          
-        </tr>
-      
-                  </table>
-                <![endif]-->
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-            </div>
-
-
-            <!--[if mso | IE]>
-          </td>
-        </tr>
-      </table>
-      <![endif]-->
-
-
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
+    
+    <!-- Start of Summary -->
+    {data[summaryHtml]}
+    <!-- End of Summary -->
+    
     <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
       <tbody>
         <tr>
@@ -972,7 +871,7 @@ def emailHtmlBody(emailData):
                             <td align="center" style="font-size:0px;padding:10px 25px;padding-top:0;padding-bottom:0px;word-break:break-word;">
 
                               <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1;text-align:center;color:#000000;">
-                                <p style="font-size: 11px">Project data retrieved on {data[currentDateTime]:%d %b %Y at %I:%M %p}.</p>
+                                <p style="font-size: 11px">Process time taken: {data[execTimeTakenSeconds]} seconds.</p>
                               </div>
 
                             </td>
@@ -1591,6 +1490,235 @@ def getPendingUatTasksHtml(emailData):
       </tbody>
     </table>
     <!-- End of Tasks Pending UAT -->
+    """.format(data=emailData).replace('\n','')
+
+def getDetailedSummaryHtml(emailData):
+    return """
+    <!-- Start of Detailed Summary -->
+    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#e85034;background-color:#e85034;width:100%;">
+      <tbody>
+        <tr>
+          <td>
+
+
+            <!--[if mso | IE]>
+      <table
+         align="center" border="0" cellpadding="0" cellspacing="0" style="width:1000px;" width="1000"
+      >
+        <tr>
+          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+      <![endif]-->
+
+
+            <div style="Margin:0px auto;max-width:1000px;">
+
+              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+                <tbody>
+                  <tr>
+                    <td style="direction:ltr;font-size:0px;padding:20px 0;text-align:center;vertical-align:middle;">
+                      <!--[if mso | IE]>
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                
+        <tr>
+      
+            <td
+               style="vertical-align:middle;width:1000px;"
+            >
+          <![endif]-->
+
+                      <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:10px 25px;padding-top:25;padding-bottom:10px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:20px;line-height:1;text-align:center;color:#ffffff;">
+                                Summary
+                              </div>
+
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td style="font-size:0px;padding:10px 25px;padding-top:20;padding-right:100px;padding-bottom:20px;padding-left:100px;word-break:break-word;">
+
+                              <p style="border-top:solid 1px #fff;font-size:1;margin:0px auto;width:100%;">
+                              </p>
+
+                              <!--[if mso | IE]>
+        <table
+           align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 1px #fff;font-size:1;margin:0px auto;width:800px;" role="presentation" width="800px"
+        >
+          <tr>
+            <td style="height:0;line-height:0;">
+              &nbsp;
+            </td>
+          </tr>
+        </table>
+      <![endif]-->
+
+
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:10px 25px;padding-top:20;padding-bottom:25px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:12px;line-height:1.8;text-align:center;color:#f8d5d1;">
+                                There is a total of {data[totalHeadCounts]} headcounts on this project. Considering that each work day consists of {data[effortPerDay]} hours, this amounts to a total available resource of {data[totalAvailableEffortResource]} efforts. The team is targeted
+                                to perform at {data[expectedProficiency]:.1f}% proficiency level between {data[burndownChartStartEndDate][0]:%d %b %Y} and {data[burndownChartStartEndDate][1]:%d %b %Y}. Thus, the total ideal effort to burn is {data[expectedLinearEffortToBurn]:.1f}
+                                efforts and the ideal effort burndown trend is {data[expectedEffortBurnVelocity]:.1f} efforts/day. Based on the targeted proficiency level, the team's actual effort burndown efficiency in this period is estimated to be
+                                at {data[effortEfficiencyRating]:.2f}%.<br><br>
+                              </div>
+
+                            </td>
+                          </tr>
+
+                        </table>
+
+                      </div>
+
+                      <!--[if mso | IE]>
+            </td>
+          
+        </tr>
+      
+                  </table>
+                <![endif]-->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+
+            <!--[if mso | IE]>
+          </td>
+        </tr>
+      </table>
+      <![endif]-->
+
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- End of Detailed Summary -->
+    """.format(data=emailData).replace('\n','')
+
+def getSimpleSummaryHtml(emailData):
+    return """
+    <!-- Start of Simple Summary -->
+    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#e85034;background-color:#e85034;width:100%;">
+      <tbody>
+        <tr>
+          <td>
+
+
+            <!--[if mso | IE]>
+      <table
+         align="center" border="0" cellpadding="0" cellspacing="0" style="width:1000px;" width="1000"
+      >
+        <tr>
+          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+      <![endif]-->
+
+
+            <div style="Margin:0px auto;max-width:1000px;">
+
+              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+                <tbody>
+                  <tr>
+                    <td style="direction:ltr;font-size:0px;padding:20px 0;text-align:center;vertical-align:middle;">
+                      <!--[if mso | IE]>
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                
+        <tr>
+      
+            <td
+               style="vertical-align:middle;width:1000px;"
+            >
+          <![endif]-->
+
+                      <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:10px 25px;padding-top:25;padding-bottom:10px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:20px;line-height:1;text-align:center;color:#ffffff;">
+                                That's all!
+                              </div>
+
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td style="font-size:0px;padding:10px 25px;padding-top:20;padding-right:100px;padding-bottom:20px;padding-left:100px;word-break:break-word;">
+
+                              <p style="border-top:solid 1px #fff;font-size:1;margin:0px auto;width:100%;">
+                              </p>
+
+                              <!--[if mso | IE]>
+        <table
+           align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 1px #fff;font-size:1;margin:0px auto;width:800px;" role="presentation" width="800px"
+        >
+          <tr>
+            <td style="height:0;line-height:0;">
+              &nbsp;
+            </td>
+          </tr>
+        </table>
+      <![endif]-->
+
+
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td align="center" style="font-size:0px;padding:10px 25px;padding-top:20;padding-bottom:25px;word-break:break-word;">
+
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:12px;line-height:1.8;text-align:center;color:#f8d5d1;">
+                                Project data retrieved on {data[currentDateTime]:%d %b %Y at %I:%M %p}.<br><br>
+                              </div>
+
+                            </td>
+                          </tr>
+
+                        </table>
+
+                      </div>
+
+                      <!--[if mso | IE]>
+            </td>
+          
+        </tr>
+      
+                  </table>
+                <![endif]-->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+
+            <!--[if mso | IE]>
+          </td>
+        </tr>
+      </table>
+      <![endif]-->
+
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- End of Simple Summary -->
     """.format(data=emailData).replace('\n','')
 
 def emailHtmlHeader():
