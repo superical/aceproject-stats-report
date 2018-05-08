@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 
 #get_ipython().magic('matplotlib inline')
@@ -27,12 +27,12 @@ from pprint import pprint
 import requests
 
 
-# In[2]:
+# In[ ]:
 
 prog_start_time = time.time()
 
 
-# In[34]:
+# In[ ]:
 
 import argparse
 
@@ -44,6 +44,8 @@ argparser.add_argument('--rcpts', nargs='+', type=str)
 argparser.add_argument('--subject', nargs='?', default='Project Overview', type=str)
 
 argparser.add_argument('--BURNDOWN_LAST_NUM_DAYS', nargs='?', const=7, default=7, type=int)
+argparser.add_argument('--burndown-exclude-today', dest='burndown_exclude_today', action='store_true')
+argparser.set_defaults(burndown_exclude_today=False)
 argparser.add_argument('--GANTT_PAST_NUM_DAYS', nargs='?', const=14, default=14, type=int)
 argparser.add_argument('--GANTT_FUTURE_NUM_DAYS', nargs='?', const=15, default=15, type=int)
 
@@ -86,7 +88,7 @@ if args.proj is None or args.aceid is None or args.acepw is None or args.rcpts i
     raise ValueError('Parameter proj, aceid, acepw or rcpts cannot be undefined.')
 
 
-# In[35]:
+# In[ ]:
 
 PROJECT_ID = args.proj
 REPORT_RECIPIENTS = args.rcpts
@@ -108,6 +110,7 @@ TARGET_PROFICIENCY_LEVEL = args.targetprof
 NUM_HEADCOUNT = args.headcount
 
 BURNDOWN_LAST_NUM_DAYS = args.BURNDOWN_LAST_NUM_DAYS
+BURNDOWN_EXCLUDE_TODAY = args.burndown_exclude_today
 GANTT_PAST_NUM_DAYS = args.GANTT_PAST_NUM_DAYS
 GANTT_FUTURE_NUM_DAYS = args.GANTT_FUTURE_NUM_DAYS
 
@@ -135,10 +138,10 @@ EMAIL_SENDER_NAME = args.sender_name
 EMAIL_SENDER_ADDR = args.sender_email
 
 CONVERT_SVG2PNG = args.CONVERT_SVG2PNG
-APP_VERSION = '0.2.3'
+APP_VERSION = '0.2.4'
 
 
-# In[5]:
+# In[ ]:
 
 if NOTEBOOK_MODE is False:
     import matplotlib
@@ -150,7 +153,7 @@ from matplotlib.ticker import MaxNLocator
 import seaborn as sns
 
 
-# In[6]:
+# In[ ]:
 
 class ApiRequest:
     
@@ -179,7 +182,7 @@ class ApiRequest:
         return res['results']
 
 
-# In[7]:
+# In[ ]:
 
 class BaseObject:
     
@@ -189,7 +192,7 @@ class BaseObject:
         self.request = ApiRequest(ACE_ACCID, ACE_USERID, ACE_PASSWORD)
 
 
-# In[8]:
+# In[ ]:
 
 class TaskStatus(Enum):
     ON_HOLD = 'On Hold'
@@ -225,7 +228,7 @@ class TaskStatus(Enum):
 #TaskStatus.getStatus('Completed')
 
 
-# In[9]:
+# In[ ]:
 
 class Task(BaseObject):
     
@@ -335,7 +338,7 @@ class Task(BaseObject):
     
 
 
-# In[10]:
+# In[ ]:
 
 if False:
     task = Task(3395)
@@ -344,7 +347,7 @@ if False:
     print(status)
 
 
-# In[11]:
+# In[ ]:
 
 class Project(BaseObject):
 
@@ -432,14 +435,14 @@ class Project(BaseObject):
  
 
 
-# In[12]:
+# In[ ]:
 
 def daterange(start_date, end_date):
     for n in range(int ((end_date - start_date).days)):
         yield start_date + datetime.timedelta(n)
 
 
-# In[13]:
+# In[ ]:
 
 def num_of_weekends(date1, date2):
     begin = date1
@@ -454,16 +457,18 @@ def num_of_weekends(date1, date2):
     return num_thur_fri
 
 
-# In[14]:
+# In[ ]:
 
 project = Project(PROJECT_ID, numMembers=NUM_HEADCOUNT, expectedProficiency=TARGET_PROFICIENCY_LEVEL) 
 project.projectName
 
 
-# In[15]:
+# In[ ]:
 
 burndown_startDate = datetime.datetime.now()-datetime.timedelta(days=BURNDOWN_LAST_NUM_DAYS)
 burndown_endDate = datetime.datetime.now()
+if BURNDOWN_EXCLUDE_TODAY is True:
+    burndown_endDate = burndown_endDate - datetime.timedelta(days=1)
 
 effortToBurnPerDay = (project.numMembers * project.effortPerDay) * project.expectedProficiency
 
@@ -555,7 +560,7 @@ burndown_df = pd.DataFrame({'id': np.arange(len(x_dates)), 'x': x_dates, 'daily_
 
 
 
-# In[16]:
+# In[ ]:
 
 burndown_df
 
@@ -565,7 +570,7 @@ burndown_df
 
 
 
-# In[17]:
+# In[ ]:
 
 burndown_remaining_gradient = 0
 burndown_ideals_gradient = 0
@@ -662,7 +667,7 @@ burndownChartImage = plotBurndownChart(burndown_df)
 
 
 
-# In[18]:
+# In[ ]:
 
 def getTasksDataFrame(inProgressBufferDays=0, attributes=[]):
     tasks = project.tasks
@@ -744,13 +749,13 @@ def getTasksDataFrame(inProgressBufferDays=0, attributes=[]):
     
 
 
-# In[19]:
+# In[ ]:
 
 gantt_df = getTasksDataFrame(inProgressBufferDays=0)
 gantt_df
 
 
-# In[20]:
+# In[ ]:
 
 def convertCategoryAsResource(dataList):
     catList = []
@@ -787,7 +792,7 @@ for idx, task in gantt_df.iterrows():
     projectChart.add_task(t)
 
 
-# In[21]:
+# In[ ]:
 
 gantt_filename = 'tmp_gantt2.svg'
 gantt_startDate = datetime.datetime.now()-datetime.timedelta(days=GANTT_PAST_NUM_DAYS)
@@ -796,7 +801,7 @@ projectChart.make_svg_for_tasks(filename=gantt_filename,
                      today=datetime.datetime.now().date(), start=gantt_startDate.date(), end=gantt_endDate.date())
 
 
-# In[22]:
+# In[ ]:
 
 gantt_base64Image = None
 if CONVERT_SVG2PNG:
@@ -831,7 +836,7 @@ if CONVERT_SVG2PNG:
 
 
 
-# In[23]:
+# In[ ]:
 
 if NOTEBOOK_MODE is True:
     from IPython.core.display import display, HTML
@@ -846,7 +851,7 @@ if NOTEBOOK_MODE is True:
 
 
 
-# In[24]:
+# In[ ]:
 
 def plotPriorityChart(startDate, endDate):
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -868,14 +873,14 @@ priorityPlotEndDate = datetime.datetime.now()
 priorityPlotImage = plotPriorityChart(priorityPlotStartDate, priorityPlotEndDate)
 
 
-# In[25]:
+# In[ ]:
 
 if NOTEBOOK_MODE is True:
     from IPython.core.display import display, HTML
     #display(HTML('<img src="data:image/jpg;base64, {}"/>'.format(statusPlotImage.decode('utf8'))))
 
 
-# In[26]:
+# In[ ]:
 
 def plotStatusChart():
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -933,7 +938,7 @@ def plotStatusChart():
 statusPlotImage = plotStatusChart()
 
 
-# In[27]:
+# In[ ]:
 
 def plotPriorityDaysTaken(startDate, endDate):
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -956,7 +961,7 @@ priorityDaysPlotEndDate = datetime.datetime.now()
 priorityDaysPlotImage = plotPriorityDaysTaken(priorityDaysPlotStartDate, priorityDaysPlotEndDate)
 
 
-# In[28]:
+# In[ ]:
 
 def plotTasksDayCreated(startDate, endDate):
     df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
@@ -978,7 +983,7 @@ tasksDayCreatedPlotEndDate = datetime.datetime.now()
 tasksDayCreatedPlotImage = plotTasksDayCreated(tasksDayCreatedPlotStartDate, tasksDayCreatedPlotEndDate)
 
 
-# In[36]:
+# In[ ]:
 
 def plotProjectWordcloud(startDate, endDate):
     from bs4 import BeautifulSoup
@@ -1043,7 +1048,7 @@ plotProjectWordcloudEndDate = datetime.datetime.now()
 plotProjectWordcloudImage = plotProjectWordcloud(plotProjectWordcloudStartDate, plotProjectWordcloudEndDate)
 
 
-# In[37]:
+# In[ ]:
 
 report_df = getTasksDataFrame(attributes=['DATE_EXPECTED_END_TASK', 'ESTIMATED_TIME'])
 uncompletedTasks_df = report_df[~report_df['STATUS'].isin(TaskStatus.getCompletedStatuses() + [TaskStatus.ON_HOLD])]
@@ -1051,7 +1056,7 @@ needToUpdateEstimatedEndDate = uncompletedTasks_df[uncompletedTasks_df['END_DATE
 needToUpdateEstimatedEffort = uncompletedTasks_df[uncompletedTasks_df['ESTIMATED_TIME'] <= 0.0]
 
 
-# In[38]:
+# In[ ]:
 
 for idx, task in needToUpdateEstimatedEndDate.iterrows():
     print(task['TASK_RESUME'])
@@ -1059,13 +1064,13 @@ for idx, task in needToUpdateEstimatedEndDate.iterrows():
 needToUpdateEstimatedEndDate
 
 
-# In[39]:
+# In[ ]:
 
 for idx, task in needToUpdateEstimatedEffort.iterrows():
     print(task['TASK_RESUME'])
 
 
-# In[40]:
+# In[ ]:
 
 def getTasksPendingUatData(minDays=0):
     uatTasks_df = getTasksDataFrame(attributes=['DATE_TASK_MODIFIED'])
@@ -1089,7 +1094,7 @@ def getTasksPendingUatData(minDays=0):
 tasksPendingUat = getTasksPendingUatData(TASKS_PENDING_UAT_MIN_DAYS)
 
 
-# In[41]:
+# In[ ]:
 
 createdSinceTasks_df = getTasksDataFrame(attributes=['DATE_TASK_CREATED'])
 createdSinceTasks_df = createdSinceTasks_df[~createdSinceTasks_df['STATUS'].isin(TaskStatus.getCompletedStatuses() + [TaskStatus.ON_HOLD])]
@@ -1101,7 +1106,7 @@ for idx, task in createdSinceTasks_df.iterrows():
     print(task['TASK_RESUME'], '\t\t\t', task['STATUS_LABEL'], '\t', daysAgo)
 
 
-# In[42]:
+# In[ ]:
 
 import uuid
 emailData = {
@@ -1147,17 +1152,17 @@ pprint(emailData)
 
 
 
-# In[43]:
+# In[ ]:
 
 import emailhtml
 
 
-# In[44]:
+# In[ ]:
 
 emailHtmlBody = emailhtml.emailHtmlBody(emailData)
 
 
-# In[45]:
+# In[ ]:
 
 emailHtmlHeader = emailhtml.emailHtmlHeader()
 emailHtmlFooter = emailhtml.emailHtmlFooter()
@@ -1172,19 +1177,19 @@ emailHtml = emailHtml.replace('\n', '')
 
 
 
-# In[46]:
+# In[ ]:
 
 import sendgrid
 from sendgrid.helpers.mail import *
 
 
-# In[47]:
+# In[ ]:
 
 if NOTEBOOK_MODE == True:
     raise ValueError('Breaking script before sending email...')
 
 
-# In[48]:
+# In[ ]:
 
 sg = sendgrid.SendGridAPIClient(apikey=SENDGRID_API_KEY)
 from_email = Email(EMAIL_SENDER_ADDR, EMAIL_SENDER_NAME)
