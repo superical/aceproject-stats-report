@@ -139,6 +139,11 @@
               <td style="padding: 0 0 0 15px;">{data[daysAgo]} days</td>
             </tr>
             <!-- End Pending UAT Task Item -->
+            <tr>
+              <td style="padding: 0 15px 0 0; width: 45%;">—</td>
+              <td style="padding: 0 15px; width: 34%;">—</td>
+              <td style="padding: 0 0 0 15px;">—</td>
+            </tr>
           </mj-table>
         </mj-column>
       </mj-section>
@@ -247,7 +252,7 @@
       <mj-section locked="true" full-width="full-width">
         <mj-column width="100%" vertical-align="middle">
           <mj-text align="center" font-size="11" locked="true" editable="false" padding-bottom="0" padding-top="0">
-            <p style="font-size: 11px">Process time taken: {data[execTimeTakenSeconds]} seconds.</p>
+            <p style="font-size: 11px">Processing time taken: {data[execTimeTakenSeconds]} seconds.</p>
           </mj-text>
           <mj-text align="center" font-size="11" locked="true" editable="true" padding-bottom="0" padding-top="0">
             <p style="font-size: 11px">Seth's ACE Reporter - v{data[appVersion]}</p>

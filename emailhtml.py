@@ -871,7 +871,7 @@ def emailHtmlBody(emailData):
                             <td align="center" style="font-size:0px;padding:10px 25px;padding-top:0;padding-bottom:0px;word-break:break-word;">
 
                               <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1;text-align:center;color:#000000;">
-                                <p style="font-size: 11px">Process time taken: {data[execTimeTakenSeconds]} seconds.</p>
+                                <p style="font-size: 11px">Processing time taken: {data[execTimeTakenSeconds]} seconds.</p>
                               </div>
 
                             </td>
@@ -1306,15 +1306,24 @@ def getEffortChartHtml(emailData):
 
 def getPendingUatTasksHtml(emailData):
     pendingUatTaskRowsHtml = ''
-    for pendingTask in emailData['pendingUatTasks']:
-        html = """
+    if len(emailData['pendingUatTasks']) < 1:
+        pendingUatTaskRowsHtml = """
             <tr>
-              <td style="padding: 0 15px 0 0;">{data[taskName]}</td>
-              <td style="padding: 0 15px;">{data[taskStatus]}</td>
-              <td style="padding: 0 0 0 15px;">{data[daysAgo]} days</td>
+              <td style="padding: 0 15px 0 0; width: 45%;">—</td>
+              <td style="padding: 0 15px; width: 34%;">—</td>
+              <td style="padding: 0 0 0 15px;">—</td>
             </tr>
-        """.format(data=pendingTask)
-        pendingUatTaskRowsHtml = pendingUatTaskRowsHtml + '\n' + html
+        """
+    else:
+        for pendingTask in emailData['pendingUatTasks']:
+            html = """
+                <tr>
+                  <td style="padding: 0 15px 0 0;">{data[taskName]}</td>
+                  <td style="padding: 0 15px;">{data[taskStatus]}</td>
+                  <td style="padding: 0 0 0 15px;">{data[daysAgo]} days</td>
+                </tr>
+            """.format(data=pendingTask)
+            pendingUatTaskRowsHtml = pendingUatTaskRowsHtml + '\n' + html
     emailData['pendingUatTaskRowsHtml'] = pendingUatTaskRowsHtml
 
     return """
