@@ -262,11 +262,11 @@ class Task(BaseObject):
                 val = self.convertFieldToDate(val)
                     
             setattr(self, resKey, val)
-     
+
     def convertFieldToDate(self, value):
-        dateMatch = re.match('/Date\((\d+)\)/', value)
-        if (bool(dateMatch) == True):
-            return datetime.datetime.fromtimestamp(int(dateMatch.group(1))/1000.0) - datetime.timedelta(hours=self.hours_diff)
+        # dateMatch = re.match('/Date\((\d+)\)/', value)
+        if (value != None):
+            return datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S") - datetime.timedelta(hours=self.hours_diff)
         return None
     
     def isCreatedOn(date):
