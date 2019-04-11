@@ -18,6 +18,11 @@ AceProject lacks in many features I needed in their reports at work. Many of the
 ![Screenshot of an example email report](https://i.imgur.com/pDxRBbl.png)
 
 ### Usage
+Run the start shell script:
+```
+./start_deploy.sh
+```
+Or manually:
 ```
 docker build -t aceproject_report .
 docker run -d aceproject_report
